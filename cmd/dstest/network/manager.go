@@ -74,6 +74,14 @@ func (nm *Manager) Init(config *config.Config, replicaIds []int) error {
 				k++
 			}
 		}
+
+		// initialize vector clocks		
+		nm.VectorClocks[i] = make(map[int]int)
+		
+		for j :=0; j<numReplicas; j++ {		
+			nm.VectorClocks[i][j] = 0
+		}
+
 	}
 
 	// FIXME: This is a temporary solution to avoid nil pointer dereference
@@ -127,25 +135,6 @@ func max(x, y int) int {
 }
 
 func (nm *Manager) updateVectorClocks(sender, receiver int) {
-
-	 //initialize inner maps 
-	if nm.VectorClocks[sender] == nil {
-		nm.VectorClocks[sender] = make(map[int]int)
-	}
-	
-	if nm.VectorClocks[receiver] == nil {
-		nm.VectorClocks[receiver] = make(map[int]int)
-	}
-
-	// initialize the entries 
-	if _, exists := nm.VectorClocks[sender][sender]; !exists {
-		nm.VectorClocks[sender][sender] = 0
-	}
-
-	if _, exists := nm.VectorClocks[receiver][receiver]; !exists {
-		nm.VectorClocks[receiver][receiver] = 0
-	}
-
 	 
  	// Update sender clock
  	nm.VectorClocks[sender][sender]++
