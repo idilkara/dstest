@@ -119,7 +119,7 @@ func (s *PCT) Next(messages []*network.Message, faults []*faults.Fault, context 
 		}
 
 		if decision < 0 {
-			s.Step = s.Step - 1 //if step is not decremented, the step number does not match with the step number the test engine counts.
+			//s.Step = s.Step - 1 //if step is not decremented, the step number does not match with the step number the test engine counts.
 			return SchedulerDecision{
 				DecisionType: NoOp,
 			}
