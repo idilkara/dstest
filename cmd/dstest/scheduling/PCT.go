@@ -40,7 +40,7 @@ func (s *PCT) Init(config *config.Config) {
 	s.Step = 0
 	s.PriorityChangePoints = make([]int, 0)
 	s.InitialPriorities = make([]int, 0)
-	for i := 1; i < s.Depth; i++ { //depth-1 priority change points? 
+	for i := 1; i < s.Depth; i++ { 
 		s.PriorityChangePoints = append(s.PriorityChangePoints, s.distinctRandomInteger(s.Config.SchedulerConfig.Steps, s.PriorityChangePoints))
 	}
 	//PriorityChangePoints is iterated and compared to the current step number (increasing sequence) - so the list should be sorted.
@@ -80,7 +80,7 @@ func (s *PCT) NextIteration() {
 	s.Step = 0
 	s.PriorityChangePoints = make([]int, 0)
 	s.InitialPriorities = make([]int, 0)
-	for i := 1; i < s.Depth; i++ { //depth-1 priority change points? 
+	for i := 1; i < s.Depth; i++ { 
 		s.PriorityChangePoints = append(s.PriorityChangePoints, s.distinctRandomInteger(s.Config.SchedulerConfig.Steps, s.PriorityChangePoints))
 	}
 	sort.Ints(s.PriorityChangePoints)
@@ -100,12 +100,10 @@ func (s *PCT) Shutdown() {
 
 // Returns a random index from available messages
 func (s *PCT) Next(messages []*network.Message, faults []*faults.Fault, context faults.FaultContext) SchedulerDecision {
-	if s.NumPriorityChanged < (s.Depth-1) { // indexes start with 0.
+	if s.NumPriorityChanged < (s.Depth-1) { 
 		if s.Step == s.PriorityChangePoints[s.NumPriorityChanged] {
 			s.NumPriorityChanged++
-			s.NumPriorityChange  =  (s.NumPriorityChange +1 )  % ( s.Config.ProcessConfig.NumReplicas -1 )//treats InitialPriorities as a circular list. 
-			// NumpriorityChange isOF {0,1,2}
-			// NumpriorityChanged isOF {0,1,... depth-2}
+			s.NumPriorityChange  =  (s.NumPriorityChange +1 )  % ( s.Config.ProcessConfig.NumReplicas -1 )
 		}
 	}
 
